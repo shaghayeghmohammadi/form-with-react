@@ -1,13 +1,15 @@
+@font-face {
+  font-family: kalameh-black;
+  src: url(./fonts/KalamehWeb_Black.woff2);
+}
+@font-face {
+  font-family: kalameh-bold;
+  src: url(./fonts/KalamehWeb_Bold.ttf);
+}
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: kalameh-black, kalameh-bold;
   -webkit-font-smoothing: antialiased;
+  background-color: #f5f5f5;
   -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
 }
