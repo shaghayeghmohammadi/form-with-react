@@ -48,3 +48,11 @@ button:hover {
   font-size: 1.1rem;
   color: red;
 }
+@media only screen and (max-width: 600px) {
+  input {
+    width: 200px;
+  }
+  button {
+    width: 225px;
+  }
+}
