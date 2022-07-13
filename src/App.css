@@ -20,6 +20,9 @@
   -ms-filter: blur(50px);
   filter: blur(50px);
 }
+.formContainer {
+  width: 435px;
+}
 label {
   display: flex;
   margin-bottom: 8px;
@@ -30,7 +33,7 @@ label {
   accent-color: #0052cd;
 }
 .checkbox input {
-  margin-left: 20px;
+  margin-left: 25px;
   cursor: pointer;
 }
 .checkbox label {
@@ -105,7 +108,7 @@ input:-webkit-autofill:active {
   background-color: rgb(223, 214, 255);
 }
 .error {
-  width: 435px;
+  /* width: 435px; */
   margin-top: 5px;
   font-family: kalameh-bold;
   font-size: 1.1rem;
@@ -119,11 +122,16 @@ input:-webkit-autofill:active {
 }
 
 @media only screen and (max-width: 600px) {
-  input {
+  .formContainer {
+    width: 225px;
+  }
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
     width: 200px;
   }
   .button {
-    width: 225px;
+    width: 220px;
     height: 35px;
   }
   .error {
@@ -131,5 +139,9 @@ input:-webkit-autofill:active {
   }
   .success {
     font-size: 1.2rem;
+  }
+  .checkbox input {
+    margin-left: 25px;
+    cursor: pointer;
   }
 }

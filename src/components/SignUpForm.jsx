@@ -43,7 +43,7 @@ const validationSchema = yup.object({
 });
 
 const SignUpForm = () => {
-  const [signUp, setSignUp] = useState(false);
+  const [signUp, setsignUp] = useState(false);
 
   const formik = useFormik({
     initialValues,
@@ -54,11 +54,11 @@ const SignUpForm = () => {
 
   // onclick for my button
   const handleClick = () => {
-    setSignUp(true);
+    setsignUp(true);
   };
 
   return (
-    <div>
+    <div className="formContainer">
       <form onSubmit={formik.handleSubmit}>
         <div className="formControl">
           <label htmlFor="">نام و نام‌خانوادگی</label>
@@ -91,6 +91,9 @@ const SignUpForm = () => {
             onChange={formik.handleChange}
             checked={formik.values.gender === "1"}
           />
+          {formik.errors.gender && formik.touched.gender && (
+            <div className="error">{formik.errors.gender}</div>
+          )}
         </div>
         <div className="formControl">
           <label htmlFor="">ایمیل</label>
@@ -141,10 +144,8 @@ const SignUpForm = () => {
         >
           ثبت‌نام
         </button>
-        {signUp ? (
+        {signUp && formik.isValid && (
           <div className="success">تبریک! ثبت‌نام با موفقیت انجام شد.</div>
-        ) : (
-          ""
         )}
       </form>
     </div>
