@@ -1,8 +1,10 @@
 import { useFormik } from "formik";
+import { useState } from "react";
 import * as yup from "yup";
 
 const initialValues = {
   name: "",
+  gender: "",
   email: "",
   password: "",
   number: "",
@@ -18,6 +20,7 @@ const validationSchema = yup.object({
     .string()
     .required("اسمتو باید حتما بنویسی داداش!")
     .min(6, "اسم و فامیلت چقد کوتاهه"),
+  gender: yup.string().required("جنسیتتو وارد کن!"),
   email: yup
     .string()
     .email("مطمئنی ایمیلت معتبره؟")
@@ -40,6 +43,8 @@ const validationSchema = yup.object({
 });
 
 const SignUpForm = () => {
+  const [signUp, setSignUp] = useState(false);
+
   const formik = useFormik({
     initialValues,
     onSubmit,
@@ -47,7 +52,10 @@ const SignUpForm = () => {
     validateOnMount: true,
   });
 
-  console.log(formik.errors);
+  // onclick for my button
+  const handleClick = () => {
+    setSignUp(true);
+  };
 
   return (
     <div>
@@ -63,6 +71,26 @@ const SignUpForm = () => {
           {formik.errors.name && formik.touched.name && (
             <div className="error">{formik.errors.name}</div>
           )}
+        </div>
+        <div className="formControl checkbox">
+          <label htmlFor="0">خانوم</label>
+          <input
+            type="radio"
+            name="gender"
+            id="0"
+            value="0"
+            onChange={formik.handleChange}
+            checked={formik.values.gender === "0"}
+          />
+          <label htmlFor="1">آقا</label>
+          <input
+            type="radio"
+            name="gender"
+            id="1"
+            value="1"
+            onChange={formik.handleChange}
+            checked={formik.values.gender === "1"}
+          />
         </div>
         <div className="formControl">
           <label htmlFor="">ایمیل</label>
@@ -82,6 +110,7 @@ const SignUpForm = () => {
             <div className="error">{formik.errors.number}</div>
           )}
         </div>
+
         <div className="formControl">
           <label htmlFor="">رمزعبور</label>
           <input
@@ -105,9 +134,18 @@ const SignUpForm = () => {
               <div className="error">{formik.errors.passwordConfirmation}</div>
             )}
         </div>
-        <button disabled={!formik.isValid} type="submit">
+        <button
+          onClick={handleClick}
+          className={formik.isValid ? "button" : "button disabled"}
+          type="submit"
+        >
           ثبت‌نام
         </button>
+        {signUp ? (
+          <div className="success">تبریک! ثبت‌نام با موفقیت انجام شد.</div>
+        ) : (
+          ""
+        )}
       </form>
     </div>
   );
