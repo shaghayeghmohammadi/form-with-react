@@ -41,9 +41,36 @@ label {
   cursor: pointer;
 }
 
+.options {
+  display: inline-flex;
+  margin-bottom: 35px;
+  margin-top: 5px;
+  justify-content: right;
+  max-width: 400px;
+  flex-wrap: wrap;
+  font-family: kalameh-bold;
+  accent-color: #0052cd;
+  border-radius: 5px;
+  box-shadow: 3px 5px 9px #0052cd1e;
+  padding: 25px 10px;
+  background: #e9f0f8;
+}
+.skills {
+  padding-top: 22px;
+}
+.options label {
+  margin-right: 10px;
+  cursor: pointer;
+}
+.options input {
+  margin-left: 25px;
+  cursor: pointer;
+}
+
 input[type="text"],
 input[type="email"],
-input[type="password"] {
+input[type="password"],
+select {
   width: 400px;
   border: none;
   border-radius: 5px;
@@ -54,6 +81,11 @@ input[type="password"] {
   color: rgb(30, 0, 163);
   font-size: 1.1rem;
   font-family: kalameh-bold;
+}
+select {
+  margin: 43px 0 2px 0;
+  padding: 5px 15px;
+  width: 422px;
 }
 input:focus {
   outline: none;
@@ -121,6 +153,10 @@ input:-webkit-autofill:active {
   font-size: 1.3rem;
 }
 
+.options-wrapper {
+  display: inline-flex;
+}
+
 @media only screen and (max-width: 600px) {
   .formContainer {
     width: 225px;
@@ -142,6 +178,17 @@ input:-webkit-autofill:active {
   }
   .checkbox input {
     margin-left: 25px;
+    cursor: pointer;
+  }
+  select {
+    width: 220px;
+  }
+  .options label {
+    margin-right: 2px;
+    cursor: pointer;
+  }
+  .options input {
+    margin-left: 12px;
     cursor: pointer;
   }
 }

@@ -1,6 +1,32 @@
 import { useFormik } from "formik";
 import { useState } from "react";
 import * as yup from "yup";
+import Inputs from "./common/Inputs";
+import RadioButton from "./common/RadioButton";
+import SelectOptions from "./common/SelectOption";
+import CheckboxInput from "./common/CheckboxInput";
+import axios from "axios";
+
+const radioOptions = [
+  { label: "آقا", value: "1" },
+  { label: "خانم", value: "0" },
+];
+
+const selectOptions = [
+  { label: "کشور خود را انتخاب کنید", value: "" },
+  { label: "ایران", value: "IR" },
+  { label: "آلمان", value: "GER" },
+  { label: "اسپانیا", value: "ُSPA" },
+  { label: "ترکیه", value: "TURK" },
+];
+
+const checkboxOptions = [
+  { label: "جاواسکریپت", value: "Javascript" },
+  { label: "زبان انگلیسی", value: "English" },
+  { label: "بوت‌استرپ", value: "bootstrap" },
+  { label: "وردپرس", value: "wordpress" },
+  { label: "تیلویند", value: "tailwind" },
+];
 
 const initialValues = {
   name: "",
@@ -9,37 +35,51 @@ const initialValues = {
   password: "",
   number: "",
   passwordConfirmation: "",
+  country: "",
+  skills: [],
+  terms: false,
 };
 
 const onSubmit = (values) => {
-  console.log(values);
+  axios
+    .post("url", values)
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((error) => console.log(error));
 };
 
 const validationSchema = yup.object({
   name: yup
     .string()
-    .required("اسمتو باید حتما بنویسی داداش!")
-    .min(6, "اسم و فامیلت چقد کوتاهه"),
-  gender: yup.string().required("جنسیتتو وارد کن!"),
-  email: yup
-    .string()
-    .email("مطمئنی ایمیلت معتبره؟")
-    .required("پس ایمیلت کو؟ حتما باید بنویسیش!"),
+    .required("نام و نام‌خانوادگی خود را بنویسید!")
+    .min(6, "اسم و فامیل حداقل 6 کاراکتر باشد"),
+  gender: yup.string().required("جنسیت خود را وارد کنید!"),
+  email: yup.string().email("ایمیل نامعتبر").required("ایمیل ضروری است."),
   number: yup
     .string()
-    .required("شمارتو باید بزنی")
+    .required("شماره خود را وارد کنید")
     .matches(/^[0-9]{11}$/, "شماره نامعتبر"),
+  country: yup.string().required("لطفا کشور خود را انتخاب کنید"),
+  skills: yup
+    .array()
+    .required("حداقل باید یکی از مهارت‌ها را داشته باشید!")
+    .min(1, "حداقل باید یکی از مهارت‌ها را داشته باشید!"),
   password: yup
     .string()
-    .required("پسورد نزاشتی که نابغه! :)")
+    .required("پسورد نزاشتی که ! :)")
     .matches(
       /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
-      "پسوردت باید حداقل 8 کاراکتر، به لاتین باشه، حداقل 1 حرف و 1 عدد هم داشته باشه."
+      "پسورد باید حداقل 8 کاراکتر، به لاتین، حداقل 1 حرف و 1 عدد داشته باشد."
     ),
   passwordConfirmation: yup
     .string()
     .required("ضروری")
-    .oneOf([yup.ref("password"), null], "پسوردها یکی نیستن!"),
+    .oneOf([yup.ref("password"), null], "پسوردها یکسان نیستند!"),
+  terms: yup
+    .boolean()
+    .oneOf([true], "باید با قوانین و مقررات موافق باشید")
+    .required("باید با قوانین و مقررات موافق باشید"),
 });
 
 const SignUpForm = () => {
@@ -60,83 +100,53 @@ const SignUpForm = () => {
   return (
     <div className="formContainer">
       <form onSubmit={formik.handleSubmit}>
-        <div className="formControl">
-          <label htmlFor="">نام و نام‌خانوادگی</label>
-          <input
-            type="text"
-            // this get field prop thingy is going to pass the onblur onchange etc
-            {...formik.getFieldProps("name")}
-            name="name"
-          />
-          {formik.errors.name && formik.touched.name && (
-            <div className="error">{formik.errors.name}</div>
-          )}
-        </div>
+        <Inputs formik={formik} name="name" label="نام و نام‌خانوادگی" />
+        <RadioButton
+          formik={formik}
+          radioOptions={radioOptions}
+          name="gender"
+        />
+        <Inputs formik={formik} name="email" label="ایمیل" />
+        <Inputs formik={formik} name="number" label="شماره تماس" />
+        <SelectOptions
+          name="country"
+          formik={formik}
+          selectOptions={selectOptions}
+        />
+        <label className="skills">مهارت‌ها:</label>
+        <CheckboxInput
+          name="skills"
+          formik={formik}
+          checkboxOptions={checkboxOptions}
+        />
+        <Inputs
+          formik={formik}
+          name="password"
+          label="رمزعبور"
+          type="password"
+        />
+        <Inputs
+          formik={formik}
+          name="passwordConfirmation"
+          label="تکرار رمزعبور"
+          type="password"
+        />
+
         <div className="formControl checkbox">
-          <label htmlFor="0">خانوم</label>
+          <label htmlFor="terms">با قوانین و مقررات موافقم.</label>
           <input
-            type="radio"
-            name="gender"
-            id="0"
-            value="0"
+            type="checkbox"
+            name="terms"
+            id="terms"
+            value={true}
             onChange={formik.handleChange}
-            checked={formik.values.gender === "0"}
-          />
-          <label htmlFor="1">آقا</label>
-          <input
-            type="radio"
-            name="gender"
-            id="1"
-            value="1"
-            onChange={formik.handleChange}
-            checked={formik.values.gender === "1"}
-          />
-          {formik.errors.gender && formik.touched.gender && (
-            <div className="error">{formik.errors.gender}</div>
-          )}
-        </div>
-        <div className="formControl">
-          <label htmlFor="">ایمیل</label>
-          <input type="text" {...formik.getFieldProps("email")} name="email" />
-          {formik.errors.email && formik.touched.email && (
-            <div className="error">{formik.errors.email}</div>
-          )}
-        </div>
-        <div className="formControl">
-          <label htmlFor="">شماره تماس</label>
-          <input
-            type="text"
-            {...formik.getFieldProps("number")}
-            name="number"
-          />
-          {formik.errors.number && formik.touched.number && (
-            <div className="error">{formik.errors.number}</div>
+            checked={formik.values.terms}
+          ></input>
+          {formik.errors.terms && formik.touched.terms && (
+            <div className="error">{formik.errors.terms}</div>
           )}
         </div>
 
-        <div className="formControl">
-          <label htmlFor="">رمزعبور</label>
-          <input
-            type="text"
-            {...formik.getFieldProps("password")}
-            name="password"
-          />
-          {formik.errors.password && formik.touched.password && (
-            <div className="error">{formik.errors.password}</div>
-          )}
-        </div>
-        <div className="formControl">
-          <label htmlFor="">تکرار رمزعبور</label>
-          <input
-            type="text"
-            {...formik.getFieldProps("passwordConfirmation")}
-            name="passwordConfirmation"
-          />
-          {formik.errors.passwordConfirmation &&
-            formik.touched.passwordConfirmation && (
-              <div className="error">{formik.errors.passwordConfirmation}</div>
-            )}
-        </div>
         <button
           onClick={handleClick}
           className={formik.isValid ? "button" : "button disabled"}
